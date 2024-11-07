@@ -4,7 +4,7 @@ on:
 # allow push on  ain branch
    push:
     branches: [main]
-    # alow pull on main braint
+    # alow pull on the main braint
    pull_request:
       branches: [main]
   #Allow to run workflow manually 
@@ -16,28 +16,16 @@ jobs:
      runs-on: ubuntu-latest
      steps:
        - uses: actions/checkout@v2
+         with:
+          fetch-depth: 0
        - name: Add remote
-        env:git-actions
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.10.15
-      uses: actions/setup-python@v1
-      with:
-        python-version: 3.10.15
-    - name: Install dependencies
-      run: |
-        make install
-    - name: Lint with pylint
-      run: |
-        make lint
-    - name: Test with pytest
-      run: |
-        make test
-    - name: Format code
-      run: |
-        make format
+         env:
+           HF: ${{secret.HUGGING_FACE_ACT_SECRET}}
+         run: git remote add space https://huggingface.co/spaces/agbenge/demo
+       - name: Push to hub
+         env:
+           HF: ${{secret.HUGGING_FACE_ACT_SECRET}}
+         run: git push --force https://huggingface.co/spaces/agbenge/demo
+ 
     
     
